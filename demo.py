@@ -1,12 +1,15 @@
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 from prisma import Client
+import logging
+logging.basicConfig()
 
 async def main():
+    logging.getLogger('prisma').setLevel(logging.DEBUG)
     client = Client()
     await client.connect()
-    today = datetime.utcnow()
+    today = datetime.now(timezone.utc)
     print(await client.demo.find_many(where={
         'created_at': {
             'lt': today
